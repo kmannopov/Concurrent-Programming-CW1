@@ -31,7 +31,6 @@
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnShowAll = new System.Windows.Forms.Button();
-            this.btnUpdate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,6 +43,7 @@
             this.dgvMain.RowTemplate.Height = 24;
             this.dgvMain.Size = new System.Drawing.Size(789, 466);
             this.dgvMain.TabIndex = 0;
+            this.dgvMain.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvMain_CellFormatting);
             // 
             // btnStart
             // 
@@ -65,27 +65,17 @@
             this.btnShowAll.UseVisualStyleBackColor = true;
             this.btnShowAll.Click += new System.EventHandler(this.btnShowAll_Click);
             // 
-            // btnUpdate
-            // 
-            this.btnUpdate.Location = new System.Drawing.Point(821, 107);
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(75, 77);
-            this.btnUpdate.TabIndex = 3;
-            this.btnUpdate.Text = "Update";
-            this.btnUpdate.UseVisualStyleBackColor = true;
-            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(908, 490);
-            this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnShowAll);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.dgvMain);
             this.Name = "MainWindow";
             this.Text = "UI.8466";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).EndInit();
             this.ResumeLayout(false);
 
@@ -96,7 +86,6 @@
         private System.Windows.Forms.DataGridView dgvMain;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnShowAll;
-        private System.Windows.Forms.Button btnUpdate;
     }
 }
 

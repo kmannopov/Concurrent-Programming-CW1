@@ -10,10 +10,12 @@ namespace _8466.Infrastructure.Data
 {
     public class DataContext : DbContext
     {
-        public DataContext()
+        public DataContext() : base("DefaultConnection")
         {
             var ensureDllIsCopied = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
         }
+
         public DbSet<Swipe> Swipes { get; set; }
+        public DbSet<Operation> Operations { get; set; }
     }
 }

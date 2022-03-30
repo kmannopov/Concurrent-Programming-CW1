@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace WebService._8466
 {
@@ -16,6 +17,6 @@ namespace WebService._8466
         List<Operation> StartCollectingSwipes();
 
         [OperationContract]
-        List<Operation> GetStatus();
+        List<Operation> GetStatus(List<Guid> guids);
     }
 }

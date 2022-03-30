@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using _8466.Domain.Entities;
 using _8466.Infrastructure;
 using _8466.Infrastructure.Data;
@@ -9,58 +10,78 @@ using SynConnectDLL;
 
 namespace WebService._8466
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "MainService" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select MainService.svc or MainService.svc.cs at the Solution Explorer and start debugging.
     public class MainService : IMainService
     {
         private readonly SynConnection _connection;
         private Semaphore _pool = new Semaphore(3, 3);
-        private Thread[] threads = new Thread[10];
-        private List<Operation> operations;
         public MainService()
         {
             _connection = SynConnection.GetInstance();
         }
-        public List<Operation> GetStatus()
+        public List<Operation> GetStatus(List<Guid> guids)
         {
+            var operations = new List<Operation>();
+            foreach (Guid guid in guids)
+            {
+                using (var dbContext = new DataContext())
+                {
+                    var operationService = new OperationService(dbContext);
+                    operations = operationService.GetOperationsById(guids);
+                }
+            }
             return operations;
         }
 
         public List<Operation> StartCollectingSwipes()
         {
-            operations = new List<Operation>();
+            var operations = new List<Operation>();
             for (int i = 0; i < 10; i++)
             {
                 var ipAddress = Extensions.GetRandomIpAddress();
-                threads[i] = new Thread(() => ProcessSwipes(ipAddress));
-                threads[i].Start();
-                operations.Add(new Operation(ipAddress));
+                var operation = new Operation(ipAddress);
+                var thread = new Thread(() => ProcessSwipes(operation));
+                thread.Start();
+                operations.Add(operation);
             };
 
-            return operations;
+            using (var dbContext = new DataContext())
+            {
+                var operationService = new OperationService(dbContext);
+                operationService.AddOperations(operations);
+            }
+                return operations;
         }
 
-        public async void ProcessSwipes(string ipAddress)
+        public void ProcessSwipes(Operation operation)
         {
             try
             {
                 _pool.WaitOne();
-                operations.Find(x => x.IpAddress == ipAddress).CurrentStatus = Operation.Status.InProcess;
-                var swipes = _connection.RetrieveSwipes(ipAddress);
-                var swipeList = swipes.ReturnAsSwipeList(ipAddress);
+                operation.CurrentStatus = Operation.Status.InProcess;
+                var swipes = _connection.RetrieveSwipes(operation.IpAddress);
+                var swipeList = swipes.ReturnAsSwipeList(operation.IpAddress);
 
                 using (var dbContext = new DataContext())
                 {
+                    var operationService = new OperationService(dbContext);
+                    operationService.UpdateOperation(operation);
+
                     var swipeService = new SwipeService(dbContext);
                     foreach (var swipe in swipeList)
                     {
-                        await swipeService.AddSwipe(swipe.ReturnAsSwipe());
+                        swipeService.AddSwipe(swipe.ReturnAsSwipe());
                     }
                 }
+                Thread.Sleep(3000);
             }
             finally
             {
-                operations.Find(x => x.IpAddress == ipAddress).CurrentStatus = Operation.Status.Finished;
+                using (var dbContext = new DataContext())
+                {
+                    var operationService = new OperationService(dbContext);
+                    operation.CurrentStatus = Operation.Status.Finished;
+                    operationService.UpdateOperation(operation);
+                }
                 _pool.Release();
             }
         }

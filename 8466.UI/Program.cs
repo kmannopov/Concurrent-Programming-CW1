@@ -1,8 +1,10 @@
 ﻿using _8466.Application.Interfaces;
 using _8466.Infrastructure.Data;
+using _8466.Infrastructure.Migrations;
 using _8466.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Data.Entity;
 using System.Windows.Forms;
 
 namespace ConcProg_CW1_8466
@@ -16,6 +18,7 @@ namespace ConcProg_CW1_8466
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DataContext, Configuration>());
             ConfigureServices();
             Application.Run(new MainWindow());
         }

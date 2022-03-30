@@ -18,17 +18,17 @@ namespace _8466.Infrastructure.Services
         {
             _dataContext = dataContext;
         }
-        public async Task<bool> AddSwipe(Swipe swipe)
+        public bool AddSwipe(Swipe swipe)
         {
             _dataContext.Swipes.Add(swipe);
-            var added = await _dataContext.SaveChangesAsync();
+            var added = _dataContext.SaveChanges();
 
             return added > 0;
         }
 
-        public Task<List<Swipe>> GetAllSwipes()
+        public List<Swipe> GetAllSwipes()
         {
-            return _dataContext.Swipes.ToListAsync();
+            return _dataContext.Swipes.ToList();
         }
     }
 }

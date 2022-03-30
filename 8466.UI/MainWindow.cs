@@ -17,20 +17,20 @@ namespace ConcProg_CW1_8466
     public partial class MainWindow : Form
     {
         private readonly MainServiceReference.IMainService webService;
-        private readonly ISwipeService _swipeService;
         private List<Operation> operations;
         public MainWindow()
         {
             webService = new MainServiceReference.MainServiceClient();
-            _swipeService = (ISwipeService)Program.ServiceProvider.GetService(typeof(ISwipeService));
             InitializeComponent();
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
             operations = webService.StartCollectingSwipes().ToList();
-            SetupDataGridView(operations);
-            //UpdateDataGridView(operations);
+            var thread = new Thread(() => SetupDataGridView(operations));
+            thread.Start();
+            var updateThread = new Thread(() => UpdateDataGridView(operations));
+            updateThread.Start();
         }
 
         private void btnShowAll_Click(object sender, EventArgs e)
@@ -42,24 +42,57 @@ namespace ConcProg_CW1_8466
 
         private void UpdateDataGridView(List<Operation> operations)
         {
-                operations = webService.GetStatus().ToList();
-                Invoke(new MethodInvoker(delegate
+            while(operations.Where(x => x.CurrentStatus == Operation.Status.InProcess 
+            || x.CurrentStatus == Operation.Status.Waiting).Count() != 0)
+            {
+                var guids = new Guid[operations.Count];
+                for (int i = 0; i < operations.Count; i++)
                 {
-                dgvMain.Refresh();
-                }));
+                    guids[i] = operations[i].Id;
+                }
+                var operationsArray = webService.GetStatus(guids);
+                SetupDataGridView(operationsArray.ToList());
+                operations = operationsArray.ToList();
                 Thread.Sleep(1000);
+            }
         }
 
         private void SetupDataGridView(List<Operation> operations)
         {
+            Invoke(new MethodInvoker(delegate
+            {
             var source = new BindingSource();
             source.DataSource = operations;
             dgvMain.DataSource = source;
+             dgvMain.Refresh();
+            }));
         }
 
-        private void btnUpdate_Click(object sender, EventArgs e)
+        private void dgvMain_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            UpdateDataGridView(operations);
+            foreach (DataGridViewRow row in dgvMain.Rows)
+            {
+                if (row.Cells["CurrentStatus"].Value is null)
+                    return;
+                if ((Operation.Status)row.Cells["CurrentStatus"].Value == Operation.Status.Waiting)
+                {
+                    row.Cells["CurrentStatus"].Style.BackColor = Color.LightSalmon;
+                }
+                else if ((Operation.Status)row.Cells["CurrentStatus"].Value == Operation.Status.InProcess)
+                {
+                    row.Cells["CurrentStatus"].Style.BackColor = Color.Yellow;
+                }
+                else if ((Operation.Status)row.Cells["CurrentStatus"].Value == Operation.Status.Finished)
+                {
+                    row.Cells["CurrentStatus"].Style.BackColor = Color.Green;
+                }
+            }
+
+        }
+
+        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

@@ -3,6 +3,7 @@
   <wsdl:types>
     <xs:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
       <xs:import namespace="http://schemas.datacontract.org/2004/07/_8466.Domain.Entities" />
+      <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xs:element name="StartCollectingSwipes">
         <xs:complexType>
           <xs:sequence />
@@ -17,13 +18,15 @@
       </xs:element>
       <xs:element name="GetStatus">
         <xs:complexType>
-          <xs:sequence />
+          <xs:sequence>
+            <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="guids" nillable="true" type="q2:ArrayOfguid" />
+          </xs:sequence>
         </xs:complexType>
       </xs:element>
       <xs:element name="GetStatusResponse">
         <xs:complexType>
           <xs:sequence>
-            <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/_8466.Domain.Entities" minOccurs="0" name="GetStatusResult" nillable="true" type="q2:ArrayOfOperation" />
+            <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/_8466.Domain.Entities" minOccurs="0" name="GetStatusResult" nillable="true" type="q3:ArrayOfOperation" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -69,7 +72,8 @@
       <xs:attribute name="Id" type="xs:ID" />
       <xs:attribute name="Ref" type="xs:IDREF" />
     </xs:schema>
-    <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/_8466.Domain.Entities" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/_8466.Domain.Entities" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/_8466.Domain.Entities" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/_8466.Domain.Entities" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xs:complexType name="ArrayOfOperation">
         <xs:sequence>
           <xs:element minOccurs="0" maxOccurs="unbounded" name="Operation" nillable="true" type="tns:Operation" />
@@ -79,6 +83,7 @@
       <xs:complexType name="Operation">
         <xs:sequence>
           <xs:element minOccurs="0" name="CurrentStatus" type="tns:Operation.Status" />
+          <xs:element minOccurs="0" name="Id" type="ser:guid" />
           <xs:element minOccurs="0" name="IpAddress" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:complexType>
@@ -91,6 +96,15 @@
         </xs:restriction>
       </xs:simpleType>
       <xs:element name="Operation.Status" nillable="true" type="tns:Operation.Status" />
+    </xs:schema>
+    <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xs:complexType name="ArrayOfguid">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="guid" type="ser:guid" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfguid" nillable="true" type="tns:ArrayOfguid" />
     </xs:schema>
   </wsdl:types>
   <wsdl:message name="IMainService_StartCollectingSwipes_InputMessage">

@@ -22,10 +22,10 @@ namespace ConcProg_CW1_8466.MainServiceReference {
         System.Threading.Tasks.Task<_8466.Domain.Entities.Operation[]> StartCollectingSwipesAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMainService/GetStatus", ReplyAction="http://tempuri.org/IMainService/GetStatusResponse")]
-        _8466.Domain.Entities.Operation[] GetStatus();
+        _8466.Domain.Entities.Operation[] GetStatus(System.Guid[] guids);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMainService/GetStatus", ReplyAction="http://tempuri.org/IMainService/GetStatusResponse")]
-        System.Threading.Tasks.Task<_8466.Domain.Entities.Operation[]> GetStatusAsync();
+        System.Threading.Tasks.Task<_8466.Domain.Entities.Operation[]> GetStatusAsync(System.Guid[] guids);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -63,12 +63,12 @@ namespace ConcProg_CW1_8466.MainServiceReference {
             return base.Channel.StartCollectingSwipesAsync();
         }
         
-        public _8466.Domain.Entities.Operation[] GetStatus() {
-            return base.Channel.GetStatus();
+        public _8466.Domain.Entities.Operation[] GetStatus(System.Guid[] guids) {
+            return base.Channel.GetStatus(guids);
         }
         
-        public System.Threading.Tasks.Task<_8466.Domain.Entities.Operation[]> GetStatusAsync() {
-            return base.Channel.GetStatusAsync();
+        public System.Threading.Tasks.Task<_8466.Domain.Entities.Operation[]> GetStatusAsync(System.Guid[] guids) {
+            return base.Channel.GetStatusAsync(guids);
         }
     }
 }

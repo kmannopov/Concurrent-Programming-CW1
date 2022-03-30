@@ -1,13 +1,7 @@
 ﻿using _8466.Application.Interfaces;
 using _8466.Domain.Entities;
-using _8466.Infrastructure.Services;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -21,24 +15,23 @@ namespace ConcProg_CW1_8466
             InitializeComponent();
             _swipeService = (ISwipeService)Program.ServiceProvider.GetService(typeof(ISwipeService));
             CreateHandle();
+            Invoke(new MethodInvoker(delegate
+            {
             LoadData();
+            }));
         }
 
-        public async Task<List<Swipe>> GetDataAsync()
+        public List<Swipe> GetData()
         {
-            return await _swipeService.GetAllSwipes();
+            return _swipeService.GetAllSwipes();
         }
 
-        public async void LoadData()
+        public void LoadData()
         {
             var source = new BindingSource();
-            var result = await GetDataAsync();
+            var result = GetData();
             source.DataSource = result.ToList();
             dgvAllSwipes.DataSource = source;
-            foreach (var swipe in result)
-            {
-                dgvAllSwipes.Rows.Add(swipe);
-            }
         }
     }
 }
