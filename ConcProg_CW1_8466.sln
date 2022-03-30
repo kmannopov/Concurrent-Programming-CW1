@@ -3,15 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI.8466", "UI.8466\UI.8466.csproj", "{4E2BB1BE-C546-46BC-8D86-5234AB217E3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "8466.UI", "8466.UI\8466.UI.csproj", "{4E2BB1BE-C546-46BC-8D86-5234AB217E3B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7B46432D-1363-4A56-83A6-1024F0843D5B} = {7B46432D-1363-4A56-83A6-1024F0843D5B}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService.8466", "WebService.8466\WebService.8466.csproj", "{7B46432D-1363-4A56-83A6-1024F0843D5B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "8466.WebService", "8466.WebService\8466.WebService.csproj", "{7B46432D-1363-4A56-83A6-1024F0843D5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.8466", "Domain.8466\Domain.8466.csproj", "{8C67F398-8088-4BAE-9F74-37CCBFBE25EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "8466.Domain", "8466.Domain\8466.Domain.csproj", "{8C67F398-8088-4BAE-9F74-37CCBFBE25EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.8466", "Application.8466\Application.8466.csproj", "{A04AA812-5117-43F2-8E47-4B7C1B2A78AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "8466.Application", "8466.Application\8466.Application.csproj", "{A04AA812-5117-43F2-8E47-4B7C1B2A78AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.8466", "Infrastructure.8466\Infrastructure.8466.csproj", "{4C916AF7-FD63-44FF-A93B-995588D59093}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "8466.Infrastructure", "8466.Infrastructure\8466.Infrastructure.csproj", "{4C916AF7-FD63-44FF-A93B-995588D59093}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

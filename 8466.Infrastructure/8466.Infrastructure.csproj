@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>_8466.Infrastructure</RootNamespace>
+	<LangVersion>8.0</LangVersion>
+	<Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\8466.Application\8466.Application.csproj" />
+    <ProjectReference Include="..\8466.Domain\8466.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
