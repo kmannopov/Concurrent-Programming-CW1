@@ -45,6 +45,8 @@ namespace ConcProg_CW1_8466
             while(operations.Where(x => x.CurrentStatus == Operation.Status.InProcess 
             || x.CurrentStatus == Operation.Status.Waiting).Count() != 0)
             {
+                if(dgvMain.Columns.Count > 0)
+                    dgvMain.Columns[0].DefaultCellStyle.ForeColor = Color.LightGray;
                 var guids = new Guid[operations.Count];
                 for (int i = 0; i < operations.Count; i++)
                 {
@@ -54,6 +56,8 @@ namespace ConcProg_CW1_8466
                 SetupDataGridView(operationsArray.ToList());
                 operations = operationsArray.ToList();
                 Thread.Sleep(1000);
+                if (dgvMain.Columns.Count > 0)
+                    dgvMain.Columns[0].DefaultCellStyle.ForeColor = Color.White;
             }
         }
 
