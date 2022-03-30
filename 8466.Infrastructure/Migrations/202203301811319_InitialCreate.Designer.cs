@@ -13,7 +13,7 @@ namespace _8466.Infrastructure.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202203301245136_InitialCreate"; }
+            get { return "202203301811319_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

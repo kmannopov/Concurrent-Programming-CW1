@@ -9,5 +9,17 @@ namespace _8466.Domain.Entities
         public string StudentId { get; set; }
         public DateTime SwipeDate { get; set; }
         public string Direction { get; set; }
+
+        public Swipe(string ipAddress, string studentId, DateTime swipeDate, string direction)
+        {
+            IpAddress = ipAddress;
+            StudentId = studentId;
+            SwipeDate = swipeDate;
+            Direction = direction;
+        }
+
+        public Swipe()
+        {
+        }
     }
 }

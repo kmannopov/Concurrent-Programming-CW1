@@ -32,57 +32,58 @@ namespace WebService._8466
             return operations;
         }
 
-        public List<Operation> StartCollectingSwipes()
+        public Guid[] StartCollectingSwipes()
         {
-            var operations = new List<Operation>();
+            var guids = new Guid[10];
             for (int i = 0; i < 10; i++)
             {
                 var ipAddress = Extensions.GetRandomIpAddress();
                 var operation = new Operation(ipAddress);
+                guids[i] = operation.Id;
                 var thread = new Thread(() => ProcessSwipes(operation));
+                thread.Name = guids[i].ToString();
                 thread.Start();
-                operations.Add(operation);
             };
 
-            using (var dbContext = new DataContext())
-            {
-                var operationService = new OperationService(dbContext);
-                operationService.AddOperations(operations);
-            }
-                return operations;
+            return guids;
         }
 
         public void ProcessSwipes(Operation operation)
         {
+            using (var dbContext = new DataContext())
+            {
+                var operationService = new OperationService(dbContext);
+                operationService.AddOperation(operation);
+            }
             try
             {
                 _pool.WaitOne();
                 operation.CurrentStatus = Operation.Status.InProcess;
-                var swipes = _connection.RetrieveSwipes(operation.IpAddress);
-                var swipeList = swipes.ReturnAsSwipeList(operation.IpAddress);
 
                 using (var dbContext = new DataContext())
                 {
                     var operationService = new OperationService(dbContext);
                     operationService.UpdateOperation(operation);
 
+                    var swipes = _connection.RetrieveSwipes(operation.IpAddress);
+                    var swipeList = swipes.ReturnAsSwipeList(operation.IpAddress);
+
                     var swipeService = new SwipeService(dbContext);
                     foreach (var swipe in swipeList)
                     {
-                        swipeService.AddSwipe(swipe.ReturnAsSwipe());
+                        swipeService.AddSwipes(swipeList);
                     }
                 }
-                Thread.Sleep(3000);
             }
             finally
             {
+                _pool.Release();
                 using (var dbContext = new DataContext())
                 {
                     var operationService = new OperationService(dbContext);
                     operation.CurrentStatus = Operation.Status.Finished;
                     operationService.UpdateOperation(operation);
                 }
-                _pool.Release();
             }
         }
     }

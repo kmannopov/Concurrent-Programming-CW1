@@ -9,7 +9,7 @@ namespace _8466.Application.Interfaces
 {
     public interface IOperationService
     {
-        bool AddOperations(IEnumerable<Operation> operations);
+        bool AddOperation(Operation operation);
         List<Operation> GetOperationsById(List<Guid> guids);
         bool UpdateOperation(Operation updatedOperation);
     }

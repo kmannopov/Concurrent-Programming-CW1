@@ -17,7 +17,10 @@ namespace ConcProg_CW1_8466
     public partial class MainWindow : Form
     {
         private readonly MainServiceReference.IMainService webService;
+        private Guid[] guids;
         private List<Operation> operations;
+        private AllSwipes AllSwipesForm;
+        private Thread refresher;
         public MainWindow()
         {
             webService = new MainServiceReference.MainServiceClient();
@@ -26,54 +29,71 @@ namespace ConcProg_CW1_8466
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            operations = webService.StartCollectingSwipes().ToList();
-            var thread = new Thread(() => SetupDataGridView(operations));
-            thread.Start();
-            var updateThread = new Thread(() => UpdateDataGridView(operations));
+            guids = webService.StartCollectingSwipes();
+            operations = webService.GetStatus(guids).ToList();
+            var updateThread = new Thread(UpdateDataGridView);
             updateThread.Start();
         }
 
         private void btnShowAll_Click(object sender, EventArgs e)
         {
-            AllSwipes Form = new AllSwipes();
-            Form.Show();
-            Form.Focus();
+            if (AllSwipesForm is null)
+                AllSwipesForm = new AllSwipes();
+            try
+            {
+            AllSwipesForm.Show();
+            AllSwipesForm.Focus();
+            }
+            catch (ObjectDisposedException)
+            {
+                AllSwipesForm = new AllSwipes();
+            }
         }
 
-        private void UpdateDataGridView(List<Operation> operations)
+        private void UpdateDataGridView()
         {
-            while(operations.Where(x => x.CurrentStatus == Operation.Status.InProcess 
+            SetupDataGridView(operations);
+            while (operations.Where(x => x.CurrentStatus == Operation.Status.InProcess 
             || x.CurrentStatus == Operation.Status.Waiting).Count() != 0)
             {
-                if(dgvMain.Columns.Count > 0)
-                    dgvMain.Columns[0].DefaultCellStyle.ForeColor = Color.LightGray;
-                var guids = new Guid[operations.Count];
-                for (int i = 0; i < operations.Count; i++)
+                operations = webService.GetStatus(guids).ToList();
+                SetupDataGridView(operations);
+                Thread.Sleep(100);
+                try
                 {
-                    guids[i] = operations[i].Id;
+                ColorCells();
                 }
-                var operationsArray = webService.GetStatus(guids);
-                SetupDataGridView(operationsArray.ToList());
-                operations = operationsArray.ToList();
-                Thread.Sleep(1000);
-                if (dgvMain.Columns.Count > 0)
-                    dgvMain.Columns[0].DefaultCellStyle.ForeColor = Color.White;
+                catch (Exception)
+                {
+                    Application.Exit();
+                }
+                Thread.Sleep(200);
             }
         }
 
         private void SetupDataGridView(List<Operation> operations)
         {
-            Invoke(new MethodInvoker(delegate
-            {
             var source = new BindingSource();
             source.DataSource = operations;
-            dgvMain.DataSource = source;
-             dgvMain.Refresh();
-            }));
+            try
+            {
+                if (!dgvMain.IsHandleCreated)
+                    Thread.CurrentThread.Abort();
+                Invoke(new MethodInvoker(delegate
+                {
+                    dgvMain.DataSource = source;
+                    dgvMain.Refresh();
+                }));
+            }
+            catch (InvalidOperationException)
+            {
+            }
         }
 
-        private void dgvMain_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void ColorCells()
         {
+            Invoke(new MethodInvoker(delegate
+            {
             foreach (DataGridViewRow row in dgvMain.Rows)
             {
                 if (row.Cells["CurrentStatus"].Value is null)
@@ -91,7 +111,7 @@ namespace ConcProg_CW1_8466
                     row.Cells["CurrentStatus"].Style.BackColor = Color.Green;
                 }
             }
-
+            }));
         }
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)

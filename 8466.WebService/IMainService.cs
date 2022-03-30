@@ -14,7 +14,7 @@ namespace WebService._8466
     public interface IMainService
     {
         [OperationContract]
-        List<Operation> StartCollectingSwipes();
+        Guid[] StartCollectingSwipes();
 
         [OperationContract]
         List<Operation> GetStatus(List<Guid> guids);

@@ -16,10 +16,10 @@ namespace ConcProg_CW1_8466.MainServiceReference {
     public interface IMainService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMainService/StartCollectingSwipes", ReplyAction="http://tempuri.org/IMainService/StartCollectingSwipesResponse")]
-        _8466.Domain.Entities.Operation[] StartCollectingSwipes();
+        System.Guid[] StartCollectingSwipes();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMainService/StartCollectingSwipes", ReplyAction="http://tempuri.org/IMainService/StartCollectingSwipesResponse")]
-        System.Threading.Tasks.Task<_8466.Domain.Entities.Operation[]> StartCollectingSwipesAsync();
+        System.Threading.Tasks.Task<System.Guid[]> StartCollectingSwipesAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMainService/GetStatus", ReplyAction="http://tempuri.org/IMainService/GetStatusResponse")]
         _8466.Domain.Entities.Operation[] GetStatus(System.Guid[] guids);
@@ -55,11 +55,11 @@ namespace ConcProg_CW1_8466.MainServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public _8466.Domain.Entities.Operation[] StartCollectingSwipes() {
+        public System.Guid[] StartCollectingSwipes() {
             return base.Channel.StartCollectingSwipes();
         }
         
-        public System.Threading.Tasks.Task<_8466.Domain.Entities.Operation[]> StartCollectingSwipesAsync() {
+        public System.Threading.Tasks.Task<System.Guid[]> StartCollectingSwipesAsync() {
             return base.Channel.StartCollectingSwipesAsync();
         }
         

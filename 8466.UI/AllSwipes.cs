@@ -30,7 +30,7 @@ namespace ConcProg_CW1_8466
         {
             var source = new BindingSource();
             var result = GetData();
-            source.DataSource = result.ToList();
+            source.DataSource = result.ToList().OrderByDescending(x => x.Id);
             dgvAllSwipes.DataSource = source;
         }
     }

@@ -43,7 +43,6 @@
             this.dgvMain.RowTemplate.Height = 24;
             this.dgvMain.Size = new System.Drawing.Size(789, 466);
             this.dgvMain.TabIndex = 0;
-            this.dgvMain.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvMain_CellFormatting);
             // 
             // btnStart
             // 

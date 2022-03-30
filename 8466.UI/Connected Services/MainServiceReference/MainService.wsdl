@@ -2,8 +2,8 @@
 <wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="MainService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xs:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-      <xs:import namespace="http://schemas.datacontract.org/2004/07/_8466.Domain.Entities" />
       <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xs:import namespace="http://schemas.datacontract.org/2004/07/_8466.Domain.Entities" />
       <xs:element name="StartCollectingSwipes">
         <xs:complexType>
           <xs:sequence />
@@ -12,7 +12,7 @@
       <xs:element name="StartCollectingSwipesResponse">
         <xs:complexType>
           <xs:sequence>
-            <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/_8466.Domain.Entities" minOccurs="0" name="StartCollectingSwipesResult" nillable="true" type="q1:ArrayOfOperation" />
+            <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="StartCollectingSwipesResult" nillable="true" type="q1:ArrayOfguid" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -72,6 +72,15 @@
       <xs:attribute name="Id" type="xs:ID" />
       <xs:attribute name="Ref" type="xs:IDREF" />
     </xs:schema>
+    <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xs:complexType name="ArrayOfguid">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="guid" type="ser:guid" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfguid" nillable="true" type="tns:ArrayOfguid" />
+    </xs:schema>
     <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/_8466.Domain.Entities" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/_8466.Domain.Entities" xmlns:xs="http://www.w3.org/2001/XMLSchema">
       <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xs:complexType name="ArrayOfOperation">
@@ -96,15 +105,6 @@
         </xs:restriction>
       </xs:simpleType>
       <xs:element name="Operation.Status" nillable="true" type="tns:Operation.Status" />
-    </xs:schema>
-    <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-      <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xs:complexType name="ArrayOfguid">
-        <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="unbounded" name="guid" type="ser:guid" />
-        </xs:sequence>
-      </xs:complexType>
-      <xs:element name="ArrayOfguid" nillable="true" type="tns:ArrayOfguid" />
     </xs:schema>
   </wsdl:types>
   <wsdl:message name="IMainService_StartCollectingSwipes_InputMessage">

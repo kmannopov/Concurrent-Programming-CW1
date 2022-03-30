@@ -18,12 +18,12 @@ namespace _8466.Infrastructure.Services
         {
             _dataContext = dataContext;
         }
-        public bool AddSwipe(Swipe swipe)
+        public bool AddSwipes(List<Swipe> swipes)
         {
-            _dataContext.Swipes.Add(swipe);
+            _dataContext.Swipes.AddRange(swipes);
             var added = _dataContext.SaveChanges();
 
-            return added > 0;
+            return added == swipes.Count;
         }
 
         public List<Swipe> GetAllSwipes()

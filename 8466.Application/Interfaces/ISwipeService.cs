@@ -5,7 +5,7 @@ namespace _8466.Application.Interfaces
 {
     public interface ISwipeService
     {
-        bool AddSwipe(Swipe swipe);
+        bool AddSwipes(List<Swipe> swipes);
         List<Swipe> GetAllSwipes();
     }
 }

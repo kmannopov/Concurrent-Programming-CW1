@@ -17,12 +17,12 @@ namespace _8466.Infrastructure.Services
         {
             _dataContext = dataContext;
         }
-        public bool AddOperations(IEnumerable<Operation> operations)
+        public bool AddOperation(Operation operation)
         {
-            _dataContext.Operations.AddRange(operations);
+            _dataContext.Operations.Add(operation);
             var added = _dataContext.SaveChanges();
 
-            return added == operations.Count() ? true : false;
+            return added > 0;
         }
 
         public List<Operation> GetOperationsById(List<Guid> guids)
