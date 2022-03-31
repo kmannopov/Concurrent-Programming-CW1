@@ -29,10 +29,16 @@ namespace ConcProg_CW1_8466
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            guids = webService.StartCollectingSwipes();
-            operations = webService.GetStatus(guids).ToList();
-            var updateThread = new Thread(UpdateDataGridView);
-            updateThread.Start();
+            if (operations == null)
+                ProcessTerminals();
+            else
+            {
+                if (operations.Where(x => x.CurrentStatus == Operation.Status.InProcess
+                || x.CurrentStatus == Operation.Status.Waiting).Count() != 0)
+                    MessageBox.Show("Some terminals are still in process. Please wait until they are finished.");
+                else
+                    ProcessTerminals();
+            }
         }
 
         private void btnShowAll_Click(object sender, EventArgs e)
@@ -117,6 +123,14 @@ namespace ConcProg_CW1_8466
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void ProcessTerminals()
+        {
+            guids = webService.StartCollectingSwipes();
+            operations = webService.GetStatus(guids).ToList();
+            var updateThread = new Thread(UpdateDataGridView);
+            updateThread.Start();
         }
     }
 }
